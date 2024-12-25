@@ -66,6 +66,8 @@ firewall-cmd --zone=public --list-ports #查看已开放的端口
 ```shell
 #查看frp服务启动情况以及涉及端口
 netstat -nlp|grep frp
+#或者
+ps aux | grep frp
 ```
 
 ## 2.配置frpc（frp客户端）--以mac为例
@@ -115,30 +117,40 @@ auth.method = "token"
 auth.token = "xx12345"
 transport.heartbeatInterval = 30
 transport.heartbeatTimeout = 90
-
 log.to = "./frpc.log"
 log.level = "info"
 log.maxDays = 3
-webServer.addr = "127.0.0.1"
-webServer.port = 7600
-transport.tls.enable = false
+
+transport.proxyURL = "http://127.0.0.1:1088"
 
 [[proxies]]
-name = "jp"
+name = "ssh_dgx6"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 22
+remotePort = 6001
+
+[[proxies]]
+name = "jupyter_notebook"
 type = "http"
 localIP = "127.0.0.1"
-localPort = 7777
+localPort = 8888
 customDomains=["domain.com"]
 subdomain="frp"
 ```
+
+配置文件说明：该配置在内网dgx6服务器上，有三点需要注意：<br>
+
+ - 如果内网机器可以直接访问外网则不需要配置transport.proxyURL，该配置主要为了这个内网机器能访问外网
+ - 配置ssh的时候需要指定remotePort=6001，然后在frps(frp服务端)通过firewall-cmd --add-port=6001/tcp --permanent永久开通6001端口：：其中访问时配置如下主机154.xx.xxx.xx，端口6001，账号密码就是内网dgx6服务器的连接账号密码
+ - 配置http时需要指定subdomain，然后subdomain的记录需要照2.3点在贝锐网添加下
+ - 注：比如http服务的8888端口服务要开着哟不然就访问不了
 
 ### 3.3 启动frpc
 
 ```shell
 nohup ./frpc -c frpc.toml &
 ```
-
-访问http://frp.domain.com（154.xx.xxx.xx:80）即可以访问linux本地127.0.0.1:7777端口服务了（注意7777端口对应服务要启动哟不然也访问不了）
 
 ## 4 TODO
 
