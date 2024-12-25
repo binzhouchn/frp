@@ -34,7 +34,7 @@ webServer.port = 7600
 webServer.user = "admin"
 webServer.password = "admin"
 
-log.to = "/root/frp/frps.log"
+log.to = "./frps.log"
 log.level = "info"
 log.maxDays = 3
 
