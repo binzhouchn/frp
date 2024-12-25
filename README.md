@@ -9,7 +9,7 @@ https://github.com/luckjiawei/frpc-desktop 这个frp客户端还是比较好用�
  - Frpc-Desktop-1.1.5-arm64.dmg
 
 
-## 1.配置frps（frp服务端）
+## 1.配置frps（frp服务端）--部署在雨云上
 
 
 ### 1.1 下载frp_0.61.1_linux_amd64.tar.gz
@@ -61,6 +61,11 @@ firewall-cmd --add-port=7100/tcp --permanent #永久添加7100端口
 firewall-cmd --add-port=7600/tcp --permanent #永久添加7600端口
 firewall-cmd --reload #重新载入配置，添加规则之后，需要执行此命令
 firewall-cmd --zone=public --list-ports #查看已开放的端口
+```
+
+```shell
+#查看frp服务启动情况以及涉及端口
+netstat -nlp|grep frp
 ```
 
 ## 2.配置frpc（frp客户端）--以mac为例
