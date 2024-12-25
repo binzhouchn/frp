@@ -91,15 +91,49 @@ https://console-domain.oray.com/domain-list/domain-resolution?rootname=domain.co
 
 ### 2.4 保存后点击启动frpc
 
-启动后通过，访问http://frp.domain.com（154.xx.xxx.xx:80）即可以访问本地127.0.0.1:7777端口服务了！
+启动后通过，访问http://frp.domain.com（154.xx.xxx.xx:80）即可以访问macbook本地127.0.0.1:7777端口服务了！
 
-
+【注windows和mac类似】
 
 ## 3.配置frpc（frp客户端）--以linux为例
 
+### 3.1 下载对应frpc客户端
 
-TODO
+比如https://github.com/fatedier/frp/releases/download/v0.61.1/frp_0.61.1_linux_amd64.tar.gz
 
+### 3.2 配置frpc.toml文件
 
+```shell
+serverAddr = "154.xx.xxx.xx"
+serverPort = 7100
+auth.method = "token"
+auth.token = "xx12345"
+transport.heartbeatInterval = 30
+transport.heartbeatTimeout = 90
 
+log.to = "./frpc.log"
+log.level = "info"
+log.maxDays = 3
+webServer.addr = "127.0.0.1"
+webServer.port = 7600
+transport.tls.enable = false
+
+[[proxies]]
+name = "jp"
+type = "http"
+localIP = "127.0.0.1"
+localPort = 7777
+customDomains=["domain.com"]
+subdomain="frp"
+```
+
+### 3.3 启动frpc
+
+```shell
+nohup ./frpc -c frpc.toml &
+```
+
+访问http://frp.domain.com（154.xx.xxx.xx:80）即可以访问linux本地127.0.0.1:7777端口服务了（注意7777端口对应服务要启动哟不然也访问不了）
+
+## 4 TODO
 
