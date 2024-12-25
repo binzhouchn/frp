@@ -58,6 +58,7 @@ firewall-cmd --state #查看防火墙状态，是否是running
 systemctl start firewalld #启动防火墙
 systemctl enable firewalld #开机启动
 firewall-cmd --add-port=7100/tcp --permanent #永久添加7100端口
+firewall-cmd --add-port=7600/tcp --permanent #永久添加7600端口
 firewall-cmd --reload #重新载入配置，添加规则之后，需要执行此命令
 firewall-cmd --zone=public --list-ports #查看已开放的端口
 ```
